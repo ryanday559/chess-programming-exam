@@ -46,6 +46,17 @@ public class ChessPiece {
         return type;
     }
 
+
+    private Map<PieceType, PieceMovement> movementRuleMap = Map.of(
+            PieceType.BISHOP, new BishopMovement(),
+            PieceType.ROOK, new RookMovement(),
+            PieceType.KNIGHT, new KnightMovement(),
+            PieceType.KING, new KingMovement(),
+            PieceType.QUEEN, new QueenMovement(),
+            PieceType.PAWN, new PawnMovement()
+    );
+
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -54,7 +65,8 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        PieceMovement movementRules = movementRuleMap.get(board.getPiece(myPosition).getPieceType());
+        return movementRules.getMoveOptions(board, myPosition);
     }
 
 

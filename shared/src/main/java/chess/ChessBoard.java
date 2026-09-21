@@ -84,6 +84,48 @@ public class ChessBoard {
     }
 
 
+    public boolean moveOutOfBounds(ChessMove move) {
+        ChessPosition endPosition = move.getEndPosition();
+        if (endPosition.getRow() > board.length ||
+            endPosition.getRow() < 1 ||
+            endPosition.getColumn() > board[0].length ||
+            endPosition.getColumn() < 1
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean canCapture(ChessPosition startPosition, ChessPosition endPosition) {
+        if (getPiece(endPosition) == null) {
+            return false;
+        }
+        ChessGame.TeamColor attackingColor = getPiece(startPosition).getTeamColor();
+        ChessGame.TeamColor defendingColor = getPiece(endPosition).getTeamColor();
+        if (attackingColor == defendingColor) {
+            return false;
+        }
+        return true;
+    }
+
+
+    public boolean isValidMove(ChessMove move) {
+        ChessPosition startPosition = move.getStartPosition();
+        ChessPosition endPosition = move.getEndPosition();
+        if (moveOutOfBounds(move)) {
+            return false;
+        }
+        else if (
+            getPiece(endPosition) == null ||
+            canCapture(startPosition, endPosition)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+
     private boolean checkEqualBoard(ChessBoard otherBoard) {
         if (otherBoard.toString().equals(toString())) {
             return true;
